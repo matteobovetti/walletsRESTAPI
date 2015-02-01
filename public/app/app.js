@@ -4,6 +4,8 @@
 angular.module('walletsApp', [
   'ngRoute',
   'walletsApp.add',
+  'walletsApp.movements',
+  'walletsApp.statistics',
   'walletsApp.version'
 ]).
 config(['$routeProvider', function($routeProvider) {
