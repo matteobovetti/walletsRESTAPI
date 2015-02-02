@@ -7,20 +7,48 @@
   <div class="col-md-3"></div>
 
     <div class="col-md-6">
-
+        
+        <h2>Movements</h2>
+        
+        <form class="form-inline">
+            <div class="form-group">
+                <label>Search</label>
+                <input type="text" ng-model="query">
+            </div>
+        </form>
+        
         <table class="table table-striped">
             <tr>
+                <th>Action</th>
                 <th>Date</th>
                 <th>Description</th>
                 <th>Amount</th>
+                <th>Tags</th>
+                <th>Wallet</th>
+                <th>PoU</th>
+                <th>Frequency Type</th>
+                <th>Frequency</th>
             </tr>
-            <tr ng-repeat="mov in movements">
+            <tr ng-repeat="mov in movements | filter:query">
+                <td>
+                    <button type="button" class="btn btn-primary btn-sm" ng-click="edit()" title="Edit"><span class="glyphicon glyphicon-edit"></span></button>
+                </td>
                 <td>{{mov.date | date:'dd-MM-yyyy'}}</td>
                 <td>{{mov.description}}</td>
-                <td>{{mov.amount}}</td>
+                <td ng-if="mov.amount >= 0" class="success">{{mov.amount}}</td>
+                <td ng-if="mov.amount < 0" class="danger">{{mov.amount}}</td>
+                <td>{{mov.tags}}</td>
+                <td>{{mov.wallet}}</td>
+                <td>{{mov.pou}}</td>
+                <td>{{mov.frequencytype}}</td>
+                <td>{{mov.frequency}}</td>
             </tr>
         </table>
 
+        <!-- Include a html portion inside the page.
+        <div ng-include="'add/add.html'"></div>
+        -->
+        
     </div>
   <div class="col-md-3"></div>
 </div>
