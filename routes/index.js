@@ -8,7 +8,7 @@ var movSchema = mongoose.Schema({
 	    date: Date,
 	    description: String,
 	    amount: Number,
-	    tags: Array,
+	    tags: String,
 	    wallet: String,
 	    PoU: Number,
 	    frequencytype: String,
@@ -22,14 +22,22 @@ router.get('/', function(req, res, next) {
 });
 */
 
-router.post('/addMovement', function (req, res) {
+router.get('/movements', function(req, res, next) {
+	var Movements = mongoose.model('movements', movSchema);
+    
+    var query = Movements.find().exec(function (err, results) {
+      if (err) return handleError(err);
+		res.status(200).json(results);
+    });
+});
 
+router.post('/addMovement', function (req, res) {
 	var Movements = mongoose.model('movements', movSchema);
 
 	var mov = new Movements(req.body);
 	mov.save(function (err, mov) {
 	  if (err) return console.error(err);
-	  	// Ok.
+	  	// Created.
 		res.status(201).json(mov);
 	});
 

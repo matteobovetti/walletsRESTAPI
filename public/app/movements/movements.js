@@ -11,6 +11,17 @@ angular.module('walletsApp.movements', ['ngRoute'])
 
 .controller('MovementsCtrl', ['$scope', '$http', function($scope, $http) {
     
-    console.log('MovementsCtrl');
+    $scope.movements = [];
+    
+    $http.get('/movements').
+      success(function(data, status, headers, config) {
+        $scope.movements = data;
+      }).
+      error(function(data, status, headers, config) {
+        alert('Opssss!!! the server is not ready');
+        
+        console.log(data);
+        console.log(status);
+      });
 
 }]);

@@ -15,10 +15,16 @@ angular.module('walletsApp.add', ['ngRoute'])
     $scope.statustext = '';
     $scope.statusclass = '';
     $scope.statusshow = false;
+    $scope.cost = 'cost';
 
 	$scope.add = function () {
 		console.log($scope.movement);
 
+        if ($scope.cost === 'cost')
+            $scope.movement.amount *= -1;
+        
+        console.log($scope.movement);
+        
         $http.post('/addMovement', $scope.movement).
           success(function(data, status, headers, config) {
             
