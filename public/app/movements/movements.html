@@ -4,19 +4,18 @@
 </div>-->
 <div class="row">
 
-  <div class="col-md-3"></div>
+    <div class="col-md-1"></div>
 
-    <div class="col-md-6">
-        
+    <div class="col-md-10">
+
         <h2>Movements</h2>
-        
+
         <form class="form-inline">
             <div class="form-group">
-                <label>Search</label>
-                <input type="text" ng-model="query">
+                    <input class="form-control" type="text" ng-model="query" placeholder="find something..." title="Find" style="margin-bottom:20px;">
             </div>
         </form>
-        
+
         <table class="table table-striped">
             <tr>
                 <th>Action</th>
@@ -31,12 +30,11 @@
             </tr>
             <tr ng-repeat="mov in movements | filter:query">
                 <td>
-                    <button type="button" class="btn btn-primary btn-sm" ng-click="edit()" title="Edit"><span class="glyphicon glyphicon-edit"></span></button>
+                    <a href="#/update/{{mov._id}}" class="btn btn-primary btn-sm" title="Update"><span class="glyphicon glyphicon-edit"></span></a>
                 </td>
                 <td>{{mov.date | date:'dd-MM-yyyy'}}</td>
                 <td>{{mov.description}}</td>
-                <td ng-if="mov.amount >= 0" class="success">{{mov.amount}}</td>
-                <td ng-if="mov.amount < 0" class="danger">{{mov.amount}}</td>
+                <td ng-class="mov.amount >= 0 ? 'success' : 'danger'">{{mov.amount}}</td>
                 <td>{{mov.tags}}</td>
                 <td>{{mov.wallet}}</td>
                 <td>{{mov.pou}}</td>
@@ -45,11 +43,9 @@
             </tr>
         </table>
 
-        <!-- Include a html portion inside the page.
-        <div ng-include="'add/add.html'"></div>
-        -->
-        
     </div>
-  <div class="col-md-3"></div>
+    
+    <div class="col-md-1"></div>
+    
 </div>
 </div>

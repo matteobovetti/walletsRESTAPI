@@ -29,12 +29,6 @@ angular.module('walletsApp.movements', ['ngRoute'])
 
     };
     
-    $scope.edit = function() {
-        
-        alert('editttt !!!');
-        
-    };
-    
     $scope.getMovemenets();
     
 }]);

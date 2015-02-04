@@ -4,6 +4,7 @@
 angular.module('walletsApp', [
   'ngRoute',
   'walletsApp.add',
+  'walletsApp.update',
   'walletsApp.movements',
   'walletsApp.statistics',
   'walletsApp.version'
@@ -19,6 +20,7 @@ config(['$routeProvider', function($routeProvider) {
  */
  
 function Movement() {
+    this._id = '';
 	this.date = moment().format('DD/MM/YYYY');
 	this.description = '';
 	this.amount = 0.0;
