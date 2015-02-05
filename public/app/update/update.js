@@ -9,29 +9,43 @@ angular.module('walletsApp.update', ['ngRoute'])
   });
 }])
 
-.controller('UpdateCtrl', ['$scope', '$http', '$routeParams', function($scope, $http, $routeParams) {
+.controller('UpdateCtrl', ['$scope', '$http', '$routeParams', '$location', function($scope, $http, $routeParams, $location) {
 
 	$scope.movement = new Movement();
+    $scope.cost = 'cost';
 
     $scope.getMovement = function() {
         
-        console.log($routeParams.movId);
+        $http.get('/movement/'+ $routeParams.movId).
+        success(function(data, status, headers, config) {
+
+            $scope.movement = data;
+            if($scope.movement.amount < 0)
+                $scope.cost = 'cost';
+            else
+                $scope.cost = 'entrance';
+        }).
+        error(function(data, status, headers, config) {
+            alert('Opssss!!! the server is not ready');
+
+            console.log(data);
+            console.log(status);
+        });
         
     };
     
 	$scope.update = function () {
         
-        alert('update...');
-        
-        /*
-        $http.put('/updateMovement', $scope.movement).
+        $http.put('/updateMovement/' + $routeParams.movId, $scope.movement).
           success(function(data, status, headers, config) {
-            
+            $location.path('/movements')
           }).
           error(function(data, status, headers, config) {
-            
+            alert('Opssss!!! the server is not ready');
+
+            console.log(data);
+            console.log(status);
           });
-        */
 	};
     
     $scope.getMovement();

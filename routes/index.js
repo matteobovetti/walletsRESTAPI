@@ -5,7 +5,6 @@ var router = express.Router();
 mongoose.connect('mongodb://localhost:27017/walletsdb');
 
 var movSchema = mongoose.Schema({
-        _id: String,
 	    date: Date,
 	    description: String,
 	    amount: Number,
@@ -14,7 +13,7 @@ var movSchema = mongoose.Schema({
 	    PoU: Number,
 	    frequencytype: String,
 	    frequency: Number
-});
+})
 
 /* GET home page. */
 /*
@@ -26,8 +25,9 @@ router.get('/', function(req, res, next) {
 router.get('/movements', function(req, res, next) {
 	var Movements = mongoose.model('movements', movSchema);
     
-    var query = Movements.find().exec(function (err, results) {
+    var query = Movements.find().sort('-date').exec(function (err, results) {
       if (err) return handleError(err);
+        // Ok.
 		res.status(200).json(results);
     });
 });
@@ -35,14 +35,22 @@ router.get('/movements', function(req, res, next) {
 router.get('/movement/:id', function(req, res, next) {
 	var Movements = mongoose.model('movements', movSchema);
     
-    var ObjectId = mongoose.Types.ObjectId;
-    
-    var query = Movements.find({ "_id": new ObjectId(req.params.id.toString())}).exec(function (err, results) {
-        if (err) return handleError(err);
-		res.status(200).json(results);
+    Movements.findById(req.params.id, function (err, mov) {
+      if (err) return handleError(err);
+        // Ok.
+		res.status(200).json(mov);
     });
+    
 });
 
+router.put('/updateMovement/:id', function (req, res) {
+	var Movements = mongoose.model('movements', movSchema);
+    
+    Movements.findByIdAndUpdate(req.params.id, { $set: req.body}, function (err, mov) {
+      if (err) return handleError(err);
+      res.status(200).json(mov);
+    });
+});
 
 router.post('/addMovement', function (req, res) {
 	var Movements = mongoose.model('movements', movSchema);

@@ -24,20 +24,21 @@
                 <th>Amount</th>
                 <th>Tags</th>
                 <th>Wallet</th>
-                <th>PoU</th>
+                <th>PoU (%)</th>
                 <th>Frequency Type</th>
                 <th>Frequency</th>
             </tr>
             <tr ng-repeat="mov in movements | filter:query">
                 <td>
                     <a href="#/update/{{mov._id}}" class="btn btn-primary btn-sm" title="Update"><span class="glyphicon glyphicon-edit"></span></a>
+                    <a href="#/delete/{{mov._id}}" class="btn btn-danger btn-sm" title="Delete"><span class="glyphicon glyphicon-remove"></span></a>
                 </td>
                 <td>{{mov.date | date:'dd-MM-yyyy'}}</td>
                 <td>{{mov.description}}</td>
                 <td ng-class="mov.amount >= 0 ? 'success' : 'danger'">{{mov.amount}}</td>
                 <td>{{mov.tags}}</td>
                 <td>{{mov.wallet}}</td>
-                <td>{{mov.pou}}</td>
+                <td>{{mov.PoU}}</td>
                 <td>{{mov.frequencytype}}</td>
                 <td>{{mov.frequency}}</td>
             </tr>
