@@ -20,7 +20,6 @@ config(['$routeProvider', function($routeProvider) {
  */
  
 function Movement() {
-    this._id = '';
 	this.date = moment().format('DD/MM/YYYY');
 	this.description = '';
 	this.amount = 0.0;

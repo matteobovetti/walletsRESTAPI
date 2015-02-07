@@ -13,7 +13,7 @@ var movSchema = mongoose.Schema({
 	    PoU: Number,
 	    frequencytype: String,
 	    frequency: Number
-})
+});
 
 /* GET home page. */
 /*
@@ -54,7 +54,9 @@ router.put('/updateMovement/:id', function (req, res) {
 
 router.post('/addMovement', function (req, res) {
 	var Movements = mongoose.model('movements', movSchema);
-
+    
+    console.log(req.body);
+    
 	var mov = new Movements(req.body);
 	mov.save(function (err, mov) {
 	  if (err) return console.error(err);
