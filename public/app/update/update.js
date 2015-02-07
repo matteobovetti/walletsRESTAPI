@@ -20,8 +20,10 @@ angular.module('walletsApp.update', ['ngRoute'])
         success(function(data, status, headers, config) {
 
             $scope.movement = data;
-            if($scope.movement.amount < 0)
+            if($scope.movement.amount < 0) {
                 $scope.cost = 'cost';
+                $scope.movement.amount *= -1;
+            }
             else
                 $scope.cost = 'entrance';
         }).
@@ -35,6 +37,9 @@ angular.module('walletsApp.update', ['ngRoute'])
     };
     
 	$scope.update = function () {
+        
+        if ($scope.cost === 'cost')
+            $scope.movement.amount *= -1;
         
         $http.put('/updateMovement/' + $routeParams.movId, $scope.movement).
           success(function(data, status, headers, config) {
