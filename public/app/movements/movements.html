@@ -31,7 +31,7 @@
             <tr ng-repeat="mov in movements | filter:query">
                 <td>
                     <a href="#/update/{{mov._id}}" class="btn btn-primary btn-sm" title="Update"><span class="glyphicon glyphicon-edit"></span></a>
-                    <a href="#/delete/{{mov._id}}" class="btn btn-danger btn-sm" title="Delete"><span class="glyphicon glyphicon-remove"></span></a>
+                    <button type="button" ng-click="delete(mov._id)" class="btn btn-danger btn-sm" title="Delete"><span class="glyphicon glyphicon-remove"></span></button>
                 </td>
                 <td>{{mov.date | date:'dd-MM-yyyy'}}</td>
                 <td>{{mov.description}}</td>

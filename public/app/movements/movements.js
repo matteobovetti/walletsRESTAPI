@@ -9,7 +9,7 @@ angular.module('walletsApp.movements', ['ngRoute'])
   });
 }])
 
-.controller('MovementsCtrl', ['$scope', '$http', function($scope, $http) {
+.controller('MovementsCtrl', ['$scope', '$http', '$routeParams', function($scope, $http, $routeParams) {
     
     $scope.movements = [];
     $scope.query = '';
@@ -27,6 +27,24 @@ angular.module('walletsApp.movements', ['ngRoute'])
             console.log(status);
         });
 
+    };
+    
+    $scope.delete = function(id) {
+        
+        console.log(id);
+        
+        $http.delete('/deleteMovement/' + id).
+        success(function(data, status, headers, config) {
+            console.log('200 OK');
+            $scope.getMovemenets();
+        }).
+        error(function(data, status, headers, config) {
+            alert('Opssss!!! the server is not ready');
+
+            console.log(data);
+            console.log(status);
+        });
+        
     };
     
     $scope.getMovemenets();

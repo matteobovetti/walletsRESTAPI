@@ -18,9 +18,9 @@ config(['$routeProvider', function($routeProvider) {
 /*
  * Movement class.
  */
- 
+
 function Movement() {
-	this.date = moment().format('DD/MM/YYYY');
+	this.date = new Date();
 	this.description = '';
 	this.amount = 0.0;
 	this.tags = '';

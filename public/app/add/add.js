@@ -22,6 +22,8 @@ angular.module('walletsApp.add', ['ngRoute'])
         if ($scope.cost === 'cost')
             $scope.movement.amount *= -1;
         
+        // $scope.movement.date = $filter('date')($scope.movement.date, 'dd-MM-yyyy');
+        
         $http.post('/addMovement', $scope.movement).
           success(function(data, status, headers, config) {
             

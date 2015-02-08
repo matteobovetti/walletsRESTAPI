@@ -55,8 +55,6 @@ router.put('/updateMovement/:id', function (req, res) {
 router.post('/addMovement', function (req, res) {
 	var Movements = mongoose.model('movements', movSchema);
     
-    console.log(req.body);
-    
 	var mov = new Movements(req.body);
 	mov.save(function (err, mov) {
 	  if (err) return console.error(err);
@@ -64,6 +62,16 @@ router.post('/addMovement', function (req, res) {
 		res.status(201).json(mov);
 	});
 
-})
+});
+
+router.delete('/deleteMovement/:id', function(req, res) {
+	var Movements = mongoose.model('movements', movSchema);
+    
+    Movements.findByIdAndRemove(req.params.id, function (err, mov) {
+      if (err) return handleError(err);
+      res.status(200).json(mov);
+    });
+    
+});
 
 module.exports = router;
