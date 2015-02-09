@@ -2,12 +2,13 @@
 
 // Declare app level module which depends on views, and components
 angular.module('walletsApp', [
-  'ngRoute',
-  'walletsApp.add',
-  'walletsApp.update',
-  'walletsApp.movements',
-  'walletsApp.statistics',
-  'walletsApp.version'
+	'ngRoute',
+	'walletsApp.add',
+	'walletsApp.update',
+	'walletsApp.movements',
+	'walletsApp.statistics',
+	'walletsApp.version',
+    'ui.bootstrap'
 ]).
 config(['$routeProvider', function($routeProvider) {
   $routeProvider.otherwise({redirectTo: '/'});
