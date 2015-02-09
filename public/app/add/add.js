@@ -12,9 +12,6 @@ angular.module('walletsApp.add', ['ngRoute'])
 .controller('AddCtrl', ['$scope', '$http', function($scope, $http) {
 
 	$scope.movement = new Movement();
-	$scope.statustext = '';
-	$scope.statusclass = '';
-	$scope.statusshow = false;
 	$scope.cost = 'cost';
 	$scope.movement_number_badge = 0;
 
@@ -27,6 +24,7 @@ angular.module('walletsApp.add', ['ngRoute'])
 		success(function(data, status, headers, config) {
 
 			$scope.movement_number_badge += 1;
+            angular.element("#movement-badge").text($scope.movement_number_badge);
 			$scope.statusclass = 'alert alert-success';
 			$scope.statustext = 'New movement(s)';
 			$scope.statusshow = true;

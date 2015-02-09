@@ -14,6 +14,8 @@ angular.module('walletsApp.movements', ['ngRoute'])
     $scope.movements = [];
     $scope.query = '';
     
+    angular.element("#movement-badge").text("0");
+    
     $scope.getMovemenets = function() {
         
         $http.get('/movements').

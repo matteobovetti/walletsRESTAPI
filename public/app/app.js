@@ -11,9 +11,8 @@ angular.module('walletsApp', [
     'ui.bootstrap'
 ]).
 config(['$routeProvider', function($routeProvider) {
-  $routeProvider.otherwise({redirectTo: '/'});
+    $routeProvider.otherwise({redirectTo: '/'});
 }]);
-
 
 
 /*
