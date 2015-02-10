@@ -1,6 +1,22 @@
 <div class="container-fluid">
 
 	<div class="row">
+		<div class="col-md-3">
+			<div class="form-group">
+				<label for="inputyears">Years</label>
+				<select class="form-control" id="inputyears" placeholder="Years" ng-model="year_selected">
+					<option value="2014">2014</option>
+					<option value="2015">2015</option>
+				</select>
+			</div>
+		</div>
+		<div class="col-md-9">
+			<input type="hidden" class="single-slider" value="1" />
+			<input type="hidden" ng-model="slider_value" />
+		</div>
+	</div>
+	
+	<div class="row">
 		<div class="col-md-12">
 			<form class="form-inline">
 				<div class="form-group">
