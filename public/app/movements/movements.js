@@ -14,13 +14,13 @@ angular.module('walletsApp.movements', ['ngRoute'])
 	$scope.movements = [];
 	$scope.query = '';
 	$scope.year_selected = moment().year();
-	$scope.month_selected = moment().month();
+	$scope.month_selected = moment().month() + 1;
 
 	angular.element("#movement-badge").text("0");
     
 	$scope.getMovemenets = function() {
 
-		$http.get('/movements').
+		$http.get('/movements?y=' + $scope.year_selected + '&m=' + $scope.month_selected).
 		success(function(data, status, headers, config) {
 			$scope.movements = data;
 		}).

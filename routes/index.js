@@ -26,14 +26,15 @@ router.get('/', function(req, res, next) {
 router.get('/movements', function(req, res, next) {
 	var Movements = mongoose.model('movements', movSchema);
     
-    var fromdt = moment([req.query.year, req.query.month, 1]);
-    var todt = moment([req.query.year, req.query.month, 1]);
-    todt.add(1, 'months');
+    var fromdt = moment([req.query.y, req.query.m - 1, 1]);
+    var todt = moment(fromdt.toDate()).add(1, 'months');
     
-    console.log(fromdt.format());
-    console.log(todt.format());
-    
-    var query = Movements.find().where('date').gte(fromdt.toDate()).lt(todt.toDate()).sort('-date').exec(function (err, results) {
+    var query = Movements.find()
+    .where('date')
+        .gte(fromdt.toDate())
+        .lt(todt.toDate())
+    .sort('-date')
+    .exec(function (err, results) {
       if (err) return handleError(err);
         // Ok.
 		res.status(200).json(results);
