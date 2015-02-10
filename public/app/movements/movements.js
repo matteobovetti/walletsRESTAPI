@@ -14,20 +14,10 @@ angular.module('walletsApp.movements', ['ngRoute'])
 	$scope.movements = [];
 	$scope.query = '';
 	$scope.year_selected = moment().year();
-	$scope.slider_value = 0;
+	$scope.month_selected = moment().month();
 
 	angular.element("#movement-badge").text("0");
-
-	angular.element(".single-slider").jRange({
-		from: 1,
-		to: 12,
-		step: 1,
-		scale: ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct', 'Nov','Dec'],
-		format: '',
-		width: 300,
-		showLabels: true
-	});
-	
+    
 	$scope.getMovemenets = function() {
 
 		$http.get('/movements').

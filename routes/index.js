@@ -1,5 +1,6 @@
 var express = require('express');
 var mongoose = require('mongoose');
+var moment = require('moment');
 var router = express.Router();
 
 mongoose.connect('mongodb://localhost:27017/walletsdb');
@@ -25,7 +26,14 @@ router.get('/', function(req, res, next) {
 router.get('/movements', function(req, res, next) {
 	var Movements = mongoose.model('movements', movSchema);
     
-    var query = Movements.find().sort('-date').exec(function (err, results) {
+    var fromdt = moment([req.query.year, req.query.month, 1]);
+    var todt = moment([req.query.year, req.query.month, 1]);
+    todt.add(1, 'months');
+    
+    console.log(fromdt.format());
+    console.log(todt.format());
+    
+    var query = Movements.find().where('date').gte(fromdt.toDate()).lt(todt.toDate()).sort('-date').exec(function (err, results) {
       if (err) return handleError(err);
         // Ok.
 		res.status(200).json(results);
