@@ -39,9 +39,6 @@ angular.module('walletsApp.statistics', ['ngRoute'])
 
 			console.log(data);
 			console.log(status);
-            
-            $scope.total_cost = 0;
-            $scope.total_entrance = 0;
 		});
         
     };

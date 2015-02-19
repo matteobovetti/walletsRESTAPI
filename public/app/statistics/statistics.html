@@ -42,10 +42,10 @@
         <div class="col-md-3">
             <div class="panel panel-danger">
                 <div class="panel-heading">
-                    <h3 class="panel-title">Cost</h3>
+                    <h3 class="panel-title">Cost </h3>
                 </div>
                 <div class="panel-body">
-                    <h3>{{total_cost}} €</h3>
+                    <h3>{{total_cost | number:2}}</h3>
                 </div>
             </div>
         </div>
@@ -55,7 +55,7 @@
                     <h3 class="panel-title">Entrance</h3>
                 </div>
                 <div class="panel-body">
-                    <h3>{{total_entrance}} €</h3>
+                    <h3>{{total_entrance | number:2}}</h3>
                 </div>
             </div>
         </div>
