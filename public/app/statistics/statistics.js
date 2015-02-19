@@ -29,7 +29,7 @@ angular.module('walletsApp.statistics', ['ngRoute'])
                 if (value.amount > 0)
                     $scope.total_entrance += value.amount;
                 else
-                    $scope.total_cost += value.amount;
+                    $scope.total_cost += (-1)*value.amount;
                 
             });
             
