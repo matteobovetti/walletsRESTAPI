@@ -15,6 +15,8 @@ angular.module('walletsApp.statistics', ['ngRoute'])
 	$scope.month_selected = moment().month() + 1;
     $scope.total_cost = 0;
     $scope.total_entrance = 0;
+    $scope.percentage_cost_entrance = 0;
+    $scope.difference_cost_entrance = 0;
     
     $scope.getStatistics = function() {
                 
@@ -32,6 +34,12 @@ angular.module('walletsApp.statistics', ['ngRoute'])
                     $scope.total_cost += (-1)*value.amount;
                 
             });
+            
+            $scope.percentage_cost_entrance = 0;
+            if ($scope.total_entrance > 0)
+                $scope.percentage_cost_entrance = ($scope.total_cost / $scope.total_entrance) * 100;
+            
+            $scope.difference_cost_entrance = $scope.total_entrance - $scope.total_cost;
             
 		}).
 		error(function(data, status, headers, config) {

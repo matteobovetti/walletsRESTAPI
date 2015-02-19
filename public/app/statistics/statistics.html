@@ -42,7 +42,7 @@
         <div class="col-md-3">
             <div class="panel panel-danger">
                 <div class="panel-heading">
-                    <h3 class="panel-title">Cost </h3>
+                    <h3 class="panel-title">Cost €</h3>
                 </div>
                 <div class="panel-body">
                     <h3>{{total_cost | number:2}}</h3>
@@ -52,7 +52,7 @@
         <div class="col-md-3">
             <div class="panel panel-success">
                 <div class="panel-heading">
-                    <h3 class="panel-title">Entrance</h3>
+                    <h3 class="panel-title">Entrance €</h3>
                 </div>
                 <div class="panel-body">
                     <h3>{{total_entrance | number:2}}</h3>
@@ -60,7 +60,27 @@
             </div>
         </div>
         
-        <div class="col-md-6"></div>
+        <div class="col-md-3">
+            <div class="panel panel-success">
+                <div class="panel-heading">
+                    <h3 class="panel-title">Difference €</h3>
+                </div>
+                <div class="panel-body">
+                    <h3>{{difference_cost_entrance | number:2}}</h3>
+                </div>
+            </div>
+        </div>
+        
+        <div class="col-md-3">
+            <div class="panel panel-success">
+                <div class="panel-heading">
+                    <h3 class="panel-title">Percentage Cost / Entrance</h3>
+                </div>
+                <div class="panel-body">
+                    <h3>{{percentage_cost_entrance | number:2}} %</h3>
+                </div>
+            </div>
+        </div>
         
     </div>
 
