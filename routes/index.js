@@ -29,6 +29,8 @@ router.get('/movements', function(req, res, next) {
     var fromdt = moment([req.query.y, req.query.m - 1, 1]);
     var todt = moment(fromdt.toDate()).add(1, 'months');
     
+	// TO DO: add "Fixed" frequecy movements filter.
+	
     var query = Movements.find()
     .where('date')
         .gte(fromdt.toDate())
