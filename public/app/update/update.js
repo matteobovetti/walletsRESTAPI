@@ -25,7 +25,7 @@ angular.module('walletsApp.update', ['ngRoute'])
                 $scope.movement.amount *= -1;
             }
             else
-                $scope.cost = 'entrance';
+                $scope.cost = 'income';
         }).
         error(function(data, status, headers, config) {
             alert('Opssss!!! the server is not ready');
