@@ -57,7 +57,7 @@ router.get('/statistics', function(req, res, next) {
     .exec(function (err, results) {
       if (err) return handleError(err);
         // Ok.
-		_.each(list, function(value, key, list){
+		_.each(results, function(value, key, results){
 			
 			if (value.frequencytype === 'f') {
 				if (value.amount > 0)
