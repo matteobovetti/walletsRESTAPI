@@ -15,7 +15,7 @@ angular.module('walletsApp.movements', ['ngRoute'])
 	$scope.query = '';
 	$scope.year_selected = moment().year();
 	$scope.month_selected = moment().month() + 1;
-
+	
 	angular.element("#movement-badge").text("0");
     
 	$scope.getMovemenets = function() {
@@ -37,7 +37,7 @@ angular.module('walletsApp.movements', ['ngRoute'])
 
 		console.log(id);
 
-		$http.delete('/deleteMovement/' + id).
+		$http.delete('/movement/' + id).
 		success(function(data, status, headers, config) {
 			console.log('200 OK');
 			$scope.getMovemenets();

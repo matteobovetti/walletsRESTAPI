@@ -27,31 +27,15 @@ angular.module('walletsApp.statistics', ['ngRoute'])
 			$scope.total_yearly_cost = 0;
 			$scope.total_yearly_income = 0;
 
-			$http.get('/movements?y=' + $scope.year_selected + '&m=' + $scope.month_selected).
+			$http.get('/statistics?y=' + $scope.year_selected + '&m=' + $scope.month_selected).
 			success(function(data, status, headers, config) {
-
-				angular.forEach(data, function(value, key) {
-
-					if (value.frequencytype === 'f')
-						if (value.amount > 0)
-							$scope.total_yearly_income += value.amount;
-						else
-							$scope.total_yearly_cost += (-1)*value.amount;
-
-					else {
-						if (value.amount > 0)
-							$scope.total_income += value.amount;
-						else
-							$scope.total_cost += (-1)*value.amount;
-					}
-
-				});
-
-				$scope.percentage_cost_income = 0;
-				if ($scope.total_income > 0)
-					$scope.percentage_cost_income = ($scope.total_cost / $scope.total_income) * 100;
-
-				$scope.difference_cost_income = $scope.total_income - $scope.total_cost;
+				
+				$scope.total_cost = data.total_cost;
+				$scope.total_income = data.total_income;
+				$scope.total_yearly_cost = data.total_yearly_cost;
+				$scope.total_yearly_income = data.total_yearly_income;
+				$scope.percentage_cost_income = data.percentage_cost_income;
+				$scope.difference_cost_income = data.difference_cost_income;
 
 			}).
 			error(function(data, status, headers, config) {

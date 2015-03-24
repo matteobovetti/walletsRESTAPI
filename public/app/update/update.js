@@ -41,7 +41,7 @@ angular.module('walletsApp.update', ['ngRoute'])
         if ($scope.cost === 'cost')
             $scope.movement.amount *= -1;
         
-        $http.put('/updateMovement/' + $routeParams.movId, $scope.movement).
+        $http.put('/movement/' + $routeParams.movId, $scope.movement).
           success(function(data, status, headers, config) {
             $location.path('/movements')
           }).
