@@ -36,10 +36,16 @@ router.get('/movements', function(req, res, next) {
 });
 
 router.get('/statistics', function(req, res, next) {
+	
 	var Movements = mongoose.model('movements', movSchema);
     
+	// date filter for mountly interval.
     var fromdt = moment([req.query.y, req.query.m - 1, 1]);
     var todt = moment(fromdt.toDate()).add(1, 'months');
+	
+	// date filter for yearly interval.
+	var y_fromdt = moment([req.query.y, 0, 1]);
+    var y_todt = moment(fromdt.toDate()).add(1, 'years');
     
 	var statistics = {
 		total_cost : 0,
@@ -50,27 +56,22 @@ router.get('/statistics', function(req, res, next) {
 		total_yearly_income : 0
 	};
 	
+	// TO DO: refactor with async.
     var query = Movements.find()
     .where('date')
         .gte(fromdt.toDate())
         .lt(todt.toDate())
+	.where('frequencytype')
+		.ne('f')
     .exec(function (err, results) {
       if (err) return handleError(err);
-        // Ok.
+
 		_.each(results, function(value, key, results){
-			
-			if (value.frequencytype === 'f') {
-				if (value.amount > 0)
-					statistics.total_yearly_income += value.amount;
-				else
-					statistics.total_yearly_cost += (-1)*value.amount;
-			}
-			else {
-				if (value.amount > 0)
-					statistics.total_income += value.amount;
-				else
-					statistics.total_cost += (-1)*value.amount;
-			}
+
+			if (value.amount > 0)
+				statistics.total_income += value.amount;
+			else
+				statistics.total_cost += (-1)*value.amount;
 				
 		});
 		
@@ -80,10 +81,30 @@ router.get('/statistics', function(req, res, next) {
 
 		statistics.difference_cost_income = statistics.total_income - statistics.total_cost;
 		
-		// Ok.
-		res.status(200).json(statistics);
 		
-    });
+		var year_query = Movements.find()
+		.where('date')
+			.gte(y_fromdt.toDate())
+			.lt(y_todt.toDate())
+		.where('frequencytype')
+			.equals('f')
+		.exec(function (err, results) {
+		  if (err) return handleError(err);
+
+			_.each(results, function(value, key, results){
+
+				if (value.amount > 0)
+					statistics.total_yearly_income_income += value.amount;
+				else
+					statistics.total_yearly_cost += (-1)*value.amount;
+				
+				// Ok.
+				res.status(200).json(statistics);
+				
+			});
+		});
+		
+	});
 });
 
 router.get('/movement/:id', function(req, res, next) {
@@ -97,7 +118,7 @@ router.get('/movement/:id', function(req, res, next) {
     
 });
 
-router.put('/updateMovement/:id', function (req, res) {
+router.put('/movement/:id', function (req, res) {
 	var Movements = mongoose.model('movements', movSchema);
     
     Movements.findByIdAndUpdate(req.params.id, { $set: req.body}, function (err, mov) {
@@ -106,7 +127,7 @@ router.put('/updateMovement/:id', function (req, res) {
     });
 });
 
-router.post('/addMovement', function (req, res) {
+router.post('/movement', function (req, res) {
 	var Movements = mongoose.model('movements', movSchema);
     
 	var mov = new Movements(req.body);
@@ -118,7 +139,7 @@ router.post('/addMovement', function (req, res) {
 
 });
 
-router.delete('/deleteMovement/:id', function(req, res) {
+router.delete('/movement/:id', function(req, res) {
 	var Movements = mongoose.model('movements', movSchema);
     
     Movements.findByIdAndRemove(req.params.id, function (err, mov) {
