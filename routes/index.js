@@ -80,8 +80,7 @@ router.get('/statistics', function(req, res, next) {
 			statistics.percentage_cost_income = (statistics.total_cost / statistics.total_income) * 100;
 
 		statistics.difference_cost_income = statistics.total_income - statistics.total_cost;
-		
-		
+        
 		var year_query = Movements.find()
 		.where('date')
 			.gte(y_fromdt.toDate())
@@ -98,10 +97,10 @@ router.get('/statistics', function(req, res, next) {
 				else
 					statistics.total_yearly_cost += (-1)*value.amount;
 				
-				// Ok.
-				res.status(200).json(statistics);
-				
 			});
+            
+            // Ok.
+            res.status(200).json(statistics);
 		});
 		
 	});
