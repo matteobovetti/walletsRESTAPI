@@ -140,12 +140,22 @@ router.post('/movement', function (req, res) {
 
 router.delete('/movement/:id', function(req, res) {
     var Movements = mongoose.model('movements', movSchema);
-
     Movements.findByIdAndRemove(req.params.id, function (err, mov) {
         if (err) return handleError(err);
         res.status(200).json(mov);
     });
+});
 
+router.get('/login', function(req, res) {
+    var username = req.query.u;
+    var password = req.query.p;
+    
+    if (username === "matteo" || username === "anto")
+        if (password === "wallets_2015")
+            res.status(200).json({ "status" : "OK"});
+    
+    res.status(401).json({ "status": "KO"});
+    
 });
 
 module.exports = router;
