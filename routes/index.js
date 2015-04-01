@@ -146,16 +146,4 @@ router.delete('/movement/:id', function(req, res) {
     });
 });
 
-router.get('/login', function(req, res) {
-    var username = req.query.u;
-    var password = req.query.p;
-    
-    if (username === "matteo" || username === "anto")
-        if (password === "wallets_2015")
-            res.status(200).json({ "status" : "OK"});
-    
-    res.status(401).json({ "status": "KO"});
-    
-});
-
 module.exports = router;
