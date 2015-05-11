@@ -59,20 +59,25 @@ router.get('/statistics', function(req, res, next) {
     // TO DO: refactor with async.
     var query = Movements.find()
     .where('date')
-    .gte(fromdt.toDate())
-    .lt(todt.toDate())
+        .gte(fromdt.toDate())
+        .lt(todt.toDate())
     .where('frequencytype')
-    .ne('f')
+        .ne('f')
     .exec(function (err, results) {
         if (err) return handleError(err);
 
         _.each(results, function(value, key, results){
-
+            
+            var current_amount = 0;
+            
             if (value.amount > 0)
-                statistics.total_income += value.amount;
+                current_amount = value.amount;
             else
-                statistics.total_cost += (-1)*value.amount;
+                current_amount = (-1)*value.amount;
 
+            if (value.frequency > 0 && value.frequencytype === 'm')
+                statistics.total_income += (current_amount / value.frequency);
+            
         });
 
         statistics.percentage_cost_income = 0;
@@ -83,10 +88,10 @@ router.get('/statistics', function(req, res, next) {
 
         var year_query = Movements.find()
         .where('date')
-        .gte(y_fromdt.toDate())
-        .lt(y_todt.toDate())
+            .gte(y_fromdt.toDate())
+            .lt(y_todt.toDate())
         .where('frequencytype')
-        .equals('f')
+            .equals('f')
         .exec(function (err, results) {
             if (err) return handleError(err);
 
