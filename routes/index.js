@@ -68,16 +68,18 @@ router.get('/statistics', function(req, res, next) {
 
         _.each(results, function(value, key, results){
             
-            var current_amount = 0;
-            
-            if (value.amount > 0)
-                current_amount = value.amount;
-            else
-                current_amount = (-1)*value.amount;
-
-            if (value.frequency > 0 && value.frequencytype === 'm')
-                statistics.total_income += (current_amount / value.frequency);
-            
+            if (value.amount > 0) {
+                if (value.frequency > 0 && value.frequencytype === 'm')
+                    statistics.total_income += (value.amount / value.frequency);
+                else
+                    statistics.total_income += ((-1)*value.amount);
+            }
+            else {
+                if (value.frequency > 0 && value.frequencytype === 'm')
+                    statistics.total_cost += (value.amount / value.frequency);
+                else
+                    statistics.total_cost += ((-1)*value.amount);
+            }
         });
 
         statistics.percentage_cost_income = 0;
