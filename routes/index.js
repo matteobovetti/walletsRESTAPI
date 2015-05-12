@@ -3,19 +3,11 @@ var mongoose = require('mongoose');
 var moment = require('moment');
 var _ = require('underscore');
 var router = express.Router();
+var movements = new require('./lib/movements');;
 
 mongoose.connect('mongodb://localhost:27017/walletsdb');
 
-var movSchema = mongoose.Schema({
-    date: Date,
-    description: String,
-    amount: Number,
-    tags: String,
-    wallet: String,
-    PoU: Number,
-    frequencytype: String,
-    frequency: Number
-});
+var movSchema = mongoose.Schema(movements.getSchema());
 
 router.get('/movements', function(req, res, next) {
     var Movements = mongoose.model('movements', movSchema);
