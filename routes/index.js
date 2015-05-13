@@ -1,18 +1,17 @@
 var express = require('express');
-var mongoose = require('mongoose'); // Kill this dependency
-var moment = require('moment'); // Kill this dependency
-var _ = require('underscore'); // Kill this dependency
+// var mongoose = require('mongoose'); // Kill this dependency
+// var moment = require('moment'); // Kill this dependency
+// var _ = require('underscore'); // Kill this dependency
 var router = express.Router();
-var movementsschema = require('./lib/movement-schema');
-var mov = require('./lib/movements');
+// var movementsschema = require('./lib/movement-schema');
+var movementsmanager = require('./lib/movements');
 
-mongoose.connect('mongodb://localhost:27017/walletsdb');
+// mongoose.connect('mongodb://localhost:27017/walletsdb');
 
-var movSchema = mongoose.Schema(movementsschema);
+// var movSchema = mongoose.Schema(movementsschema);
 
 router.get('/movements', function(req, res, next) {
-    var Movements = mongoose.model('movements', movSchema);
-    mov.getAll(Movements, req.query.y, req.query.m, function(err, results) {
+    movementsmanager.getAll(req.query.y, req.query.m, function(err, results) {
         if (err) return handleError(err);
         // Ok.
         res.status(200).json(results);
@@ -98,9 +97,7 @@ router.get('/statistics', function(req, res, next) {
 });
 
 router.get('/movement/:id', function(req, res, next) {
-    var Movements = mongoose.model('movements', movSchema);
-
-    mov.getOne(Movements, req.params.id, function(err, mov) {
+    movementsmanager.find(req.params.id, function(err, mov) {
         if (err) return handleError(err);
         // Ok.
         res.status(200).json(mov);
@@ -108,20 +105,15 @@ router.get('/movement/:id', function(req, res, next) {
 });
 
 router.put('/movement/:id', function (req, res) {
-    var Movements = mongoose.model('movements', movSchema);
-
-    Movements.findByIdAndUpdate(req.params.id, { $set: req.body}, function (err, mov) {
+    movementsmanager.update(req.params.id, req.body, function (err, mov) {
         if (err) return handleError(err);
         res.status(200).json(mov);
     });
 });
 
 router.post('/movement', function (req, res) {
-    var Movements = mongoose.model('movements', movSchema);
-
-    var mov = new Movements(req.body);
-    mov.save(function (err, mov) {
-        if (err) return console.error(err);
+    movementsmanager.insert(req.body, function (err, mov) {
+        if (err) return handleError(err);
         // Created.
         res.status(201).json(mov);
     });
@@ -129,8 +121,7 @@ router.post('/movement', function (req, res) {
 });
 
 router.delete('/movement/:id', function(req, res) {
-    var Movements = mongoose.model('movements', movSchema);
-    Movements.findByIdAndRemove(req.params.id, function (err, mov) {
+    movementsmanager.delete(req.params.id, function (err, mov) {
         if (err) return handleError(err);
         res.status(200).json(mov);
     });
