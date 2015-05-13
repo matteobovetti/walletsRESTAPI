@@ -1,20 +1,29 @@
-"use strict";
+var moment = require('moment');
 
-var Movements = function() {
-    this.schema = {
-        date: Date,
-        description: String,
-        amount: Number,
-        tags: String,
-        wallet: String,
-        PoU: Number,
-        frequencytype: String,
-        frequency: Number
+module.exports = {
+    getAll : function (mov, year, month, callback) {
+        var fromdt = moment([year, month - 1, 1]);
+        var todt = moment(fromdt.toDate()).add(1, 'months');
+
+        var query = mov.find()
+        .where('date')
+            .gte(fromdt.toDate())
+            .lt(todt.toDate())
+        .sort('-date')
+        .exec(function (err, results) {
+        if (err) return handleError(err);
+            // Ok.
+            callback(null, results);
+        });
+    },
+    
+    getOne: function(mov, id, callback) {
+        mov.findById(id, function (err, mov) {
+            if (err) return handleError(err);
+            // Ok.
+            callback(null, mov);
+        });
     }
 };
 
-Movements.prototype.getSchema = function () {
-  return this.schema;
-};
-
-module.exports = Movements;
+// module.exports = movements;

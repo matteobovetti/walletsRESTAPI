@@ -1,26 +1,18 @@
 var express = require('express');
-var mongoose = require('mongoose');
-var moment = require('moment');
-var _ = require('underscore');
+var mongoose = require('mongoose'); // Kill this dependency
+var moment = require('moment'); // Kill this dependency
+var _ = require('underscore'); // Kill this dependency
 var router = express.Router();
-var movements = new require('./lib/movements');;
+var movementsschema = require('./lib/movement-schema');
+var mov = require('./lib/movements');
 
 mongoose.connect('mongodb://localhost:27017/walletsdb');
 
-var movSchema = mongoose.Schema(movements.getSchema());
+var movSchema = mongoose.Schema(movementsschema);
 
 router.get('/movements', function(req, res, next) {
     var Movements = mongoose.model('movements', movSchema);
-
-    var fromdt = moment([req.query.y, req.query.m - 1, 1]);
-    var todt = moment(fromdt.toDate()).add(1, 'months');
-
-    var query = Movements.find()
-    .where('date')
-    .gte(fromdt.toDate())
-    .lt(todt.toDate())
-    .sort('-date')
-    .exec(function (err, results) {
+    mov.getAll(Movements, req.query.y, req.query.m, function(err, results) {
         if (err) return handleError(err);
         // Ok.
         res.status(200).json(results);
@@ -108,12 +100,11 @@ router.get('/statistics', function(req, res, next) {
 router.get('/movement/:id', function(req, res, next) {
     var Movements = mongoose.model('movements', movSchema);
 
-    Movements.findById(req.params.id, function (err, mov) {
+    mov.getOne(Movements, req.params.id, function(err, mov) {
         if (err) return handleError(err);
         // Ok.
         res.status(200).json(mov);
     });
-
 });
 
 router.put('/movement/:id', function (req, res) {
