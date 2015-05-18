@@ -65,7 +65,33 @@ module.exports = {
         });
     },
 
-    statistics: function(year, month) {
+    statistics: function(year, month, callback) {
+
+        var statistics = {
+            total_cost : 0,
+            total_income : 0,
+            percentage_cost_income : 0,
+            difference_cost_income : 0,
+            total_fixed_cost : 0,
+            total_fixed_income : 0
+        };
+
+        // TO DO: refactor with async.
+        var self = this;
+        self.mountlyMovementsWithSingleFrequency(year, month, statistics, function(err, stat) {
+            if (err) callback(err);
+            self.mountlyMovementsWithMultipleFrequency(year, month, stat, function(err, stat) {
+                if (err) callback(err);
+                self.mountlyMovementsWithFixedFrequency(year, month, stat, function(err, stat) {
+                    if (err) callback(err);
+                    callback(null, stat);
+                });
+            });
+        });
+
+    },
+
+    mountlyMovementsWithSingleFrequency: function(year, month, statistics, callback) {
 
         var Movements = mongoose.model('movements', movSchema);
 
@@ -73,43 +99,23 @@ module.exports = {
         var fromdt = moment([year, month - 1, 1]);
         var todt = moment(fromdt.toDate()).add(1, 'months');
 
-        // date filter for yearly interval.
-        var y_fromdt = moment([year, 0, 1]);
-        var y_todt = moment(fromdt.toDate()).add(1, 'years');
-
-        var statistics = {
-            total_cost : 0,
-            total_income : 0,
-            percentage_cost_income : 0,
-            difference_cost_income : 0,
-            total_yearly_cost : 0,
-            total_yearly_income : 0
-        };
-
-        // TO DO: refactor with async.
         var query = Movements.find()
         .where('date')
             .gte(fromdt.toDate())
             .lt(todt.toDate())
         .where('frequencytype')
-            .ne('f')
+            .equals('m')
+        .where('frequency')
+            .equals(1)
         .exec(function (err, results) {
-            if (err) return handleError(err);
+            if (err) return callback(err);
 
             _.each(results, function(value, key, results){
 
-                if (value.amount > 0) {
-                    if (value.frequency > 0 && value.frequencytype === 'm')
-                        statistics.total_income += (value.amount / value.frequency);
-                    else
-                        statistics.total_income += ((-1)*value.amount);
-                }
-                else {
-                    if (value.frequency > 0 && value.frequencytype === 'm')
-                        statistics.total_cost += (value.amount / value.frequency);
-                    else
-                        statistics.total_cost += ((-1)*value.amount);
-                }
+                if (value.amount > 0)
+                    statistics.total_income += value.amount;
+                else
+                    statistics.total_cost += ((-1)*value.amount);
             });
 
             statistics.percentage_cost_income = 0;
@@ -118,29 +124,85 @@ module.exports = {
 
             statistics.difference_cost_income = statistics.total_income - statistics.total_cost;
 
-            var year_query = Movements.find()
-            .where('date')
-                .gte(y_fromdt.toDate())
-                .lt(y_todt.toDate())
-            .where('frequencytype')
-                .equals('f')
-            .exec(function (err, results) {
-                if (err) return handleError(err);
-
-                _.each(results, function(value, key, results){
-
-                    if (value.amount > 0)
-                        statistics.total_yearly_income_income += value.amount;
-                    else
-                        statistics.total_yearly_cost += (-1)*value.amount;
-
-                });
-
-                // Ok.
-                res.status(200).json(statistics);
-            });
+            callback(null, statistics);
 
         });
 
+
+    },
+
+    mountlyMovementsWithMultipleFrequency: function(year, month, statistics, callback) {
+
+        var Movements = mongoose.model('movements', movSchema);
+
+        var fromdt = moment([year, month - 1, 1]);
+        var todt = moment(fromdt.toDate()).add(1, 'months');
+        var calculatemonth = 0;
+        var calculateyear = 0;
+
+        var query = Movements.find()
+        .where('frequencytype')
+            .equals('m')
+        .where('frequency')
+            .gt(1)
+        .exec(function (err, results) {
+            if (err) return callback(err);
+
+            _.each(results, function(value, key, results){
+
+                calculateyear = moment(value.date).add(value.frequency, 'months').year();
+                calculatemonth = moment(value.date).add(value.frequency, 'months').month();
+
+                if (todt.year() <= calculateyear && todt.month() <= calculatemonth) {
+                    if (value.amount > 0)
+                        statistics.total_income += (value.amount / value.frequency);
+                    else
+                        statistics.total_cost += (((-1)*value.amount) / value.frequency);
+                }
+
+            });
+
+            statistics.percentage_cost_income = 0;
+            if (statistics.total_income > 0)
+                statistics.percentage_cost_income = (statistics.total_cost / statistics.total_income) * 100;
+
+            statistics.difference_cost_income = statistics.total_income - statistics.total_cost;
+
+            callback(null, statistics);
+
+        });
+
+
+    },
+
+    mountlyMovementsWithFixedFrequency: function(year, month, statistics, callback) {
+
+        var Movements = mongoose.model('movements', movSchema);
+
+        // date filter for yearly interval.
+        var y_fromdt = moment([year, 0, 1]);
+        var y_todt = moment(y_fromdt.toDate()).add(1, 'years');
+
+        var year_query = Movements.find()
+        .where('date')
+            .gte(y_fromdt.toDate())
+            .lt(y_todt.toDate())
+        .where('frequencytype')
+            .equals('f')
+        .exec(function (err, results) {
+            if (err) return callback(err);
+
+            _.each(results, function(value, key, results){
+
+                if (value.amount > 0)
+                    statistics.total_fixed_income += value.amount;
+                else
+                    statistics.total_fixed_cost += (-1)*value.amount;
+
+            });
+
+            callback(null, statistics);
+        });
     }
+
 };
