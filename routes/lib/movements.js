@@ -65,7 +65,7 @@ module.exports = {
         });
     },
 
-    statistics: function(year, month, callback) {
+    statistics: function(year, month, wallet, callback) {
 
         var statistics = {
             total_cost : 0,
@@ -75,14 +75,14 @@ module.exports = {
             total_fixed_cost : 0,
             total_fixed_income : 0
         };
-
+        
         // TO DO: refactor with async.
         var self = this;
-        self.mountlyMovementsWithSingleFrequency(year, month, statistics, function(err, stat) {
+        self.mountlyMovementsWithSingleFrequency(year, month, wallet, statistics, function(err, stat) {
             if (err) callback(err);
-            self.mountlyMovementsWithMultipleFrequency(year, month, stat, function(err, stat) {
+            self.mountlyMovementsWithMultipleFrequency(year, month, wallet, stat, function(err, stat) {
                 if (err) callback(err);
-                self.mountlyMovementsWithFixedFrequency(year, month, stat, function(err, stat) {
+                self.mountlyMovementsWithFixedFrequency(year, month, wallet, stat, function(err, stat) {
                     if (err) callback(err);
                     callback(null, stat);
                 });
@@ -91,7 +91,7 @@ module.exports = {
 
     },
 
-    mountlyMovementsWithSingleFrequency: function(year, month, statistics, callback) {
+    mountlyMovementsWithSingleFrequency: function(year, month, wallet, statistics, callback) {
 
         var Movements = mongoose.model('movements', movSchema);
 
@@ -107,6 +107,8 @@ module.exports = {
             .equals('m')
         .where('frequency')
             .equals(1)
+        .where('wallet')
+            .equals(wallet)
         .exec(function (err, results) {
             if (err) return callback(err);
 
@@ -131,7 +133,7 @@ module.exports = {
 
     },
 
-    mountlyMovementsWithMultipleFrequency: function(year, month, statistics, callback) {
+    mountlyMovementsWithMultipleFrequency: function(year, month, wallet, statistics, callback) {
 
         var Movements = mongoose.model('movements', movSchema);
 
@@ -145,6 +147,8 @@ module.exports = {
             .equals('m')
         .where('frequency')
             .gt(1)
+        .where('wallet')
+            .equals(wallet)        
         .exec(function (err, results) {
             if (err) return callback(err);
 
@@ -175,7 +179,7 @@ module.exports = {
 
     },
 
-    mountlyMovementsWithFixedFrequency: function(year, month, statistics, callback) {
+    mountlyMovementsWithFixedFrequency: function(year, month, wallet, statistics, callback) {
 
         var Movements = mongoose.model('movements', movSchema);
 
@@ -189,6 +193,8 @@ module.exports = {
             .lt(y_todt.toDate())
         .where('frequencytype')
             .equals('f')
+        .where('wallet')
+            .equals(wallet)        
         .exec(function (err, results) {
             if (err) return callback(err);
 

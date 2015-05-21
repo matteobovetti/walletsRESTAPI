@@ -11,7 +11,7 @@ router.get('/movements', function(req, res, next) {
 });
 
 router.get('/statistics', function(req, res, next) {
-    movementsmanager.statistics(req.query.y, req.query.m, function(err, results) {
+    movementsmanager.statistics(req.query.y, req.query.m, req.query.w, function(err, results) {
         if (err) return handleError(err);
         // Ok.
         res.status(200).json(results);
