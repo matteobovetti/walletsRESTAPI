@@ -157,7 +157,7 @@ module.exports = {
                 calculateyear = moment(value.date).add(value.frequency, 'months').year();
                 calculatemonth = moment(value.date).add(value.frequency, 'months').month();
 
-                if (todt.year() <= calculateyear && todt.month() <= calculatemonth) {
+                if (todt.year() < calculateyear || (todt.year() = calculateyear && todt.month() <= calculatemonth)) {
                     if (value.amount > 0)
                         statistics.total_income += (value.amount / value.frequency);
                     else
